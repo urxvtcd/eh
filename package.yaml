@@ -1,0 +1,44 @@
+name:                eh
+version:             0.1.0.0
+github:              "urxvtcd/eh"
+license:             BSD3
+author:              "Marcin Charęza"
+maintainer:          "mc@surd.us"
+copyright:           "2019 Marcin Charęza"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+synopsis:            eh, an ed editor clone
+category:            Editor
+
+description:         Toy project. Refer to the README.md in the repository.
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+
+executables:
+  eh-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - eh
+
+tests:
+  eh-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - eh
