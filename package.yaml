@@ -20,12 +20,30 @@ dependencies:
 
 library:
   source-dirs: src
+  ghc-options:
+  - -Weverything
+  - -Werror
+  - -Wno-safe
+  - -Wno-unsafe
+  - -Wno-implicit-prelude
+  - -Wno-missing-exported-signatures
+
+  - -threaded
+  - -rtsopts
+  - -with-rtsopts=-N
 
 executables:
   eh-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
+    - -Weverything
+    - -Werror
+    - -Wno-safe
+    - -Wno-unsafe
+    - -Wno-implicit-prelude
+    - -Wno-missing-exported-signatures
+
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
@@ -37,6 +55,16 @@ tests:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
+    - -Weverything
+    - -Werror
+    - -Wno-safe
+    - -Wno-unsafe
+    - -Wno-implicit-prelude
+    - -Wno-missing-exported-signatures
+    - -Wno-missing-import-lists
+    - -Wno-missing-export-lists
+    - -Wno-all-missed-specialisations
+
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
