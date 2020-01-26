@@ -17,6 +17,8 @@ description:         Toy project. Refer to the README.md in the repository.
 
 dependencies:
 - base >= 4.7 && < 5
+- hspec >= 2.7 && < 3
+- mtl >= 2.2.2 && < 3
 
 library:
   source-dirs: src
@@ -70,3 +72,7 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - eh
+
+default-extensions:
+  - UnicodeSyntax
+  - MultiParamTypeClasses
