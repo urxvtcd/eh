@@ -36,7 +36,7 @@ library:
   - -with-rtsopts=-N
 
 executables:
-  eh-exe:
+  eh:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
