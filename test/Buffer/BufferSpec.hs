@@ -1,6 +1,6 @@
 module Buffer.BufferSpec where
 
-import Test.Hspec (Spec, describe, it, shouldBe)
+import           Test.Hspec (Spec, describe, it, shouldBe)
 
 import qualified Buffer.Buffer as Buff
 
