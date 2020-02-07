@@ -35,6 +35,7 @@ instance View Address AddressView where
 data UnverifiedAddress
     = UnverifiedLine Int
     | UnverifiedRange Int Int
+    deriving (Eq, Show)
 
 
 verifyAddress ∷ Buffer → UnverifiedAddress → Maybe Address
