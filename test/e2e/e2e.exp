@@ -1,0 +1,84 @@
+#!/usr/local/bin/expect --
+
+# Simulate editor session with print and delete commands
+
+set timeout 2
+
+spawn stack exec eh test/e2e/test_file.txt
+
+proc test {description line_to_send lines_to_expect} {
+    set to_send "$line_to_send\r"
+    set to_expect [cat_with_delimiter $lines_to_expect "\r\n"]
+
+    send $to_send
+    expect {
+        $to_expect { pass $description }
+        timeout    { fail $description }
+    }
+}
+
+proc cat_with_delimiter {strings delimiter} {
+    set result ""
+
+    foreach x [lrange $strings 0 end-1] {
+        set result "$result$x$delimiter"
+    }
+
+    set result "$result[lindex $strings end]"
+
+    return $result
+}
+
+set assertions {
+    {
+        "Prints single line"
+        "1p"
+        { "first line" ":" }
+    }
+
+    {
+        "Prints another line"
+        "2p"
+        { "second line" ":" }
+    }
+
+    {
+        "Prints range"
+        " 2 , 3 p"
+        { "second line" "third line" ":" }
+    }
+
+    {
+        "Doesn't print on invalid range"
+        "2,100p"
+        { "invalid address" ":" }
+    }
+
+    {
+        "Accepts delete command"
+        "2d"
+        { ":" }
+    }
+
+    {
+        "Prints range without deleted line"
+        "1,2p"
+        { "first line" "third line" ":" }
+    }
+
+    {
+        "Accepts delete command on a range"
+        "2,3d"
+        { ":" }
+    }
+
+    {
+        "Prints range without deleted lines"
+        "1,2p"
+        { "first line" "fifth line" ":" }
+    }
+}
+
+foreach assertion $assertions {
+    test {*}$assertion
+}

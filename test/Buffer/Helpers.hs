@@ -4,14 +4,15 @@ module Buffer.Helpers
     , makeRangeAddress
     ) where
 
-import Control.Monad.Writer (runWriter)
-import Data.Maybe (fromJust)
+import           Control.Monad.Writer (runWriter)
+import           Data.Maybe (fromJust)
 
 import qualified Buffer.Buffer as B
+import qualified Buffer.Commands as C
 
 
-runCommand ∷ B.Command → B.Buffer → B.Address → (B.Buffer, [String])
-runCommand command buffer address = runWriter $ B.run command buffer address
+runCommand ∷ C.Command → B.Buffer → B.Address → (B.Buffer, [String])
+runCommand command buffer address = runWriter $ C.run command buffer address
 
 makeLineAddress ∷ B.Buffer → Int → B.Address
 makeLineAddress buffer n =

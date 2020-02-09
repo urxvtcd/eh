@@ -1,21 +1,21 @@
 module Buffer.GoToCommandSpec where
 
-import Test.Hspec (Spec, describe, it, shouldBe)
+import           Test.Hspec (Spec, describe, it, shouldBe)
 
 import qualified Buffer.Buffer as Buff
-import Buffer.GoToCommand (goToCommand)
+import           Buffer.Commands (goTo)
 
 import qualified Buffer.Helpers as Help
 
 runGoTo ∷ Buff.Buffer → Buff.Address → (Buff.Buffer, [String])
-runGoTo = Help.runCommand goToCommand
+runGoTo = Help.runCommand goTo
 
 testBuffer ∷ Buff.Buffer
 testBuffer = Buff.Buffer 1 ["a", "b", "c"]
 
 spec :: Spec
 spec = do
-    describe "goToCommand" $ do
+    describe "goto command" $ do
         it "should work on first line" $ do
             let address = Help.makeLineAddress testBuffer 1
                 (buffer, output) = runGoTo testBuffer address

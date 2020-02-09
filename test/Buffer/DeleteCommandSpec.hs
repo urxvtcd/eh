@@ -1,21 +1,20 @@
 module Buffer.DeleteCommandSpec where
 
-import Test.Hspec (Spec, describe, it, shouldBe)
+import           Test.Hspec (Spec, describe, it, shouldBe)
 
 import qualified Buffer.Buffer as Buff
-import Buffer.DeleteCommand (deleteCommand)
-
+import           Buffer.Commands (delete)
 import qualified Buffer.Helpers as Help
 
 runDelete ∷ Buff.Buffer → Buff.Address → (Buff.Buffer, [String])
-runDelete = Help.runCommand deleteCommand
+runDelete = Help.runCommand delete
 
 testBuffer ∷ Buff.Buffer
 testBuffer = Buff.Buffer 1 ["a", "b", "c"]
 
 spec :: Spec
 spec = do
-    describe "deleteCommand" $ do
+    describe "delete command" $ do
         it "should delete first line" $ do
             let address = Help.makeLineAddress testBuffer 1
                 (buffer, output) = runDelete testBuffer address

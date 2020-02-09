@@ -1,6 +1,5 @@
 module Buffer.Buffer
     ( Buffer(..)
-    , Command(..)
     , Address
     , view
     , AddressView(..)
@@ -9,21 +8,15 @@ module Buffer.Buffer
     , UnverifiedAddress(..)
     ) where
 
-import Control.Monad.Writer (Writer)
-import Data.Maybe (isJust)
+import           Data.Maybe (isJust)
 
-import View (View, view)
+import           View (View, view)
 
 
 data Buffer = Buffer
     { cursor ∷ Int
     , bufLines ∷ [String]
     } deriving (Eq, Show)
-
-data Command = Command
-    { name ∷ String
-    , run ∷ Buffer → Address → Writer [String] Buffer
-    }
 
 data Address
     = Line Int
@@ -42,6 +35,7 @@ instance View Address AddressView where
 data UnverifiedAddress
     = UnverifiedLine Int
     | UnverifiedRange Int Int
+    deriving (Eq, Show)
 
 
 verifyAddress ∷ Buffer → UnverifiedAddress → Maybe Address

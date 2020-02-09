@@ -1,3 +1,5 @@
 .stack-work/
 eh.cabal
 *~
+testrun.log
+testrun.sum
