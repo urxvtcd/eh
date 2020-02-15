@@ -1,3 +1,7 @@
+{-|
+ This module implements logic necessary to parse string given by the user
+ to a command to be executed on a buffer.
+ -}
 module CommandParser
     ( parse
     ) where
@@ -11,6 +15,8 @@ import qualified Buffer.Buffer as Buff
 import           Buffer.Commands (Command)
 
 
+-- |'parse' takes a map of supported commands, an input string, and from it
+-- it tries to extract a buffer address and a command to be executed on the address.
 parse ∷ Map.Map String Command → String → Maybe (Buff.UnverifiedAddress, Command)
 parse m i = case RP.readP_to_S (parseInput m) i of
     [(parsed, "")] → Just parsed

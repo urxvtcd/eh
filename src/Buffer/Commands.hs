@@ -1,3 +1,6 @@
+{-|
+ This module defines commands acting on a buffer.
+ -}
 module Buffer.Commands
     ( Command
     , delete
@@ -12,8 +15,12 @@ import           Control.Monad.Writer (tell, Writer)
 import qualified Buffer.Buffer as Buff
 import           View (view)
 
+-- |Command is a type representing command acting on a buffer.
 data Command = Command
-    { name ∷ String
+    { -- | Name of the command
+      name ∷ String
+      -- |'run' runs a command on an address within a buffer.
+      -- It returns modified buffer along with generated output.
     , run ∷ Buff.Buffer → Buff.Address → Writer [String] Buff.Buffer
     }
 
@@ -23,6 +30,7 @@ instance Eq Command where
 instance Show Command where
     show c = "(Buffer Command: " ++ name c ++ ")"
 
+-- |'delete' command implements linewise deletion.
 delete ∷ Command
 delete = Command "delete" delete'
 
@@ -55,6 +63,7 @@ deleteLines xs start end = prefix ++ suffix
     suffix = drop (end - start + 1) rest
 
 
+-- |'goTo' command sets cursor on a given line in a buffer.
 goTo ∷ Command
 goTo = Command "goto" goTo'
 
@@ -67,7 +76,8 @@ goTo' buffer@(Buff.Buffer _ bufLines) address = case view address of
         return buffer
 
 
--- named print' to avoid annoying conflicts with Prelude.print
+-- |'print'' command prints lines from a buffer.
+-- It's named 'print'' to avoid annoying conflicts with 'Prelude.print'.
 print' ∷ Command
 print' = Command "print" print''
 
