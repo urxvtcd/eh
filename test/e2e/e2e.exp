@@ -2,6 +2,8 @@
 
 # Simulate editor session with print and delete commands
 
+exp_internal 1
+
 set timeout 2
 
 set PROMPT ":"
