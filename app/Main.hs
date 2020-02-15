@@ -1,6 +1,7 @@
 module Main (main) where
 
 import qualified System.IO as IO
+import qualified System.Console.Haskeline as HL
 import qualified System.Environment as Env
 import qualified Control.Monad.Writer as W
 import qualified Data.Map as Map
@@ -24,20 +25,20 @@ main = do
         [filename] → do
             contents ← IO.readFile filename
             let b = Buff.Buffer 0 (lines contents)
-            mainLoop b
+            HL.runInputT HL.defaultSettings (mainLoop b)
         _ → putStrLn "invalid invocation"
 
 
-mainLoop ∷ Buff.Buffer → IO ()
+mainLoop ∷ Buff.Buffer → HL.InputT IO ()
 mainLoop buff = do
     commandString ← prompt
     case P.parse commands commandString of
         Nothing → do
-            putStrLn "couldn't parse command"
+            HL.outputStrLn "couldn't parse command"
             mainLoop buff
         Just (address, command) → do
             let (newBuff, out) = executeCommand buff address command
-            _ ← mapM putStrLn out
+            _ ← mapM HL.outputStrLn out
             mainLoop newBuff
 
 
@@ -47,8 +48,13 @@ executeCommand b a c =
         Nothing → (b, ["invalid address"])
         Just vAddress → W.runWriter (Command.run c b vAddress)
 
-prompt :: IO String
-prompt = do
-    putStr ":"
-    IO.hFlush IO.stdout
-    getLine
+
+prompt :: HL.InputT IO String
+prompt = HL.handle (\HL.Interrupt → prompt) (HL.withInterrupt prompt')
+  where
+    prompt' :: HL.InputT IO String
+    prompt' = do
+        input ← HL.getInputLine ":"
+        case input of
+            Nothing → return ""
+            Just x → return x

@@ -4,13 +4,23 @@
 
 set timeout 2
 
+set PROMPT ":"
+set PROMPT_AFTER_OUTPUT "\r\n\x1b\\\[?1h\x1b=$PROMPT"
+set JUST_PROMPT "\r\n\u001b\\\[?1l\u001b>\u001b\\\[?1h\u001b=$PROMPT"
+
+
 spawn stack exec eh test/e2e/test_file.txt
 
 proc test {description line_to_send lines_to_expect} {
-    set to_send "$line_to_send\r"
-    set to_expect [cat_with_delimiter $lines_to_expect "\r\n"]
+    if {[llength $lines_to_expect] == 0} {
+        set to_expect $::JUST_PROMPT
+    } else {
+        set to_expect [cat_with_delimiter $lines_to_expect "\r\n"]
+        set to_expect $to_expect$::PROMPT_AFTER_OUTPUT
+    }
 
-    send $to_send
+    send "$line_to_send\r"
+
     expect {
         $to_expect { pass $description }
         timeout    { fail $description }
@@ -33,50 +43,50 @@ set assertions {
     {
         "Prints single line"
         "1p"
-        { "first line" ":" }
+        {"first line"}
     }
 
     {
         "Prints another line"
         "2p"
-        { "second line" ":" }
+        {"second line"}
     }
 
     {
         "Prints range"
         " 2 , 3 p"
-        { "second line" "third line" ":" }
+        {"second line" "third line"}
     }
 
     {
         "Doesn't print on invalid range"
         "2,100p"
-        { "invalid address" ":" }
+        {"invalid address"}
     }
 
     {
         "Accepts delete command"
         "2d"
-        { ":" }
+        {}
     }
 
     {
         "Prints range without deleted line"
         "1,2p"
-        { "first line" "third line" ":" }
+        {"first line" "third line"}
     }
 
     {
         "Accepts delete command on a range"
         "2,3d"
-        { ":" }
+        {}
     }
 
     {
         "Prints range without deleted lines"
         "1,2p"
-        { "first line" "fifth line" ":" }
-    }
+        {"first line" "fifth line"}
+     }
 }
 
 foreach assertion $assertions {
