@@ -2,7 +2,7 @@
 
 WIP ed/ex editor clone written in Haskell
 
-To see the code documentation run `stack haddock`, and see `doc/index.html`.
+To see the code documentation run `./scripts/build.sh`, and see `doc/index.html`.
 
 [![Build Status](https://travis-ci.com/urxvtcd/eh.svg?branch=master)](https://travis-ci.com/urxvtcd/eh)
 
