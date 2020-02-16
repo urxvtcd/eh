@@ -20,6 +20,7 @@ dependencies:
 - hspec >= 2.7 && < 3
 - mtl >= 2.2.2 && < 3
 - containers
+- haskeline
 
 library:
   source-dirs: src
