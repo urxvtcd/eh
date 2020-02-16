@@ -5,7 +5,6 @@
 module Buffer.Buffer
     ( Buffer(..)
     , Address
-    , view
     , AddressView(..)
     , verifyAddress
     , getLines

@@ -36,7 +36,7 @@ delete = Command "delete" delete'
 
 delete' ∷ Buff.Buffer → Buff.Address → Writer [String] Buff.Buffer
 delete' (Buff.Buffer _ xs) address = do
-    let linesAfterDelete = case Buff.view address of
+    let linesAfterDelete = case view address of
             Buff.LineView n → deleteLines xs n n
             Buff.RangeView start end → deleteLines xs start end
         newCursor = getCursorAfterDelete linesAfterDelete address
