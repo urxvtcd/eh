@@ -59,3 +59,6 @@ spec = do
 
             let parsed'' = parse commands ",p"
             parsed'' `shouldBe` Nothing
+
+        it "should fail if no suitable command is found" $ do
+            parse commands "2z" `shouldBe` Nothing
