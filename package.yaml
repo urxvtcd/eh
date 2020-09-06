@@ -32,10 +32,6 @@ library:
   - -Wno-implicit-prelude
   - -Wno-missing-exported-signatures
 
-  - -threaded
-  - -rtsopts
-  - -with-rtsopts=-N
-
 executables:
   eh:
     main:                Main.hs
@@ -47,6 +43,7 @@ executables:
     - -Wno-unsafe
     - -Wno-implicit-prelude
     - -Wno-missing-exported-signatures
+    - -Wno-all-missed-specialisations
 
     - -threaded
     - -rtsopts
