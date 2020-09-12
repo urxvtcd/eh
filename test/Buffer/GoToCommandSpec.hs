@@ -13,7 +13,7 @@ runGoTo = Help.runCommand goTo
 testBuffer ∷ Buff.Buffer
 testBuffer = Buff.Buffer 1 ["a", "b", "c"]
 
-spec :: Spec
+spec ∷ Spec
 spec = do
     describe "goto command" $ do
         it "should work on first line" $ do

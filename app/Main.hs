@@ -18,7 +18,7 @@ commands = Map.fromList
     , ("p", Command.print')
     ]
 
-main :: IO ()
+main ∷ IO ()
 main = do
     arguments ← Env.getArgs
     case arguments of
@@ -49,10 +49,10 @@ executeCommand b a c =
         Just vAddress → W.runWriter (Command.run c vAddress)
 
 
-prompt :: HL.InputT IO String
+prompt ∷ HL.InputT IO String
 prompt = HL.handle (\HL.Interrupt → prompt) (HL.withInterrupt prompt')
   where
-    prompt' :: HL.InputT IO String
+    prompt' ∷ HL.InputT IO String
     prompt' = do
         input ← HL.getInputLine ":"
         case input of

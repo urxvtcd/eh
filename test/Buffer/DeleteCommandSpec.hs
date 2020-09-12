@@ -12,7 +12,7 @@ runDelete = Help.runCommand delete
 testBuffer ∷ Buff.Buffer
 testBuffer = Buff.Buffer 1 ["a", "b", "c"]
 
-spec :: Spec
+spec ∷ Spec
 spec = do
     describe "delete command" $ do
         it "should delete first line" $ do

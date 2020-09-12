@@ -13,7 +13,7 @@ runPrint = Help.runCommand print'
 testBuffer ∷ Buff.Buffer
 testBuffer = Buff.Buffer 0 ["a", "b", "c"]
 
-spec :: Spec
+spec ∷ Spec
 spec = do
     describe "print command" $ do
         it "should work on first line" $ do
