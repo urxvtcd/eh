@@ -46,7 +46,7 @@ executeCommand ∷ Buff.Buffer → Buff.UnverifiedAddress → Command.Command �
 executeCommand b a c =
     case Buff.verifyAddress b a of
         Nothing → (b, ["invalid address"])
-        Just vAddress → W.runWriter (Command.run c b vAddress)
+        Just vAddress → W.runWriter (Command.run c vAddress)
 
 
 prompt :: HL.InputT IO String

@@ -11,8 +11,8 @@ import qualified Buffer.Buffer as B
 import qualified Buffer.Commands as C
 
 
-runCommand ∷ C.Command → B.Buffer → B.Address → (B.Buffer, [String])
-runCommand command buffer address = runWriter $ C.run command buffer address
+runCommand ∷ C.Command → B.Address → (B.Buffer, [String])
+runCommand command address = runWriter $ C.run command address
 
 makeLineAddress ∷ B.Buffer → Int → B.Address
 makeLineAddress buffer n =
