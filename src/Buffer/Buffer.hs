@@ -8,6 +8,7 @@ module Buffer.Buffer
     , AddressView(..)
     , verifyAddress
     , getLines
+    , addrToBuff
     , UnverifiedAddress(..)
     ) where
 
@@ -26,20 +27,20 @@ data Buffer = Buffer
 -- To ensure commands operate on valid addresses you cannot create it directly,
 -- use 'verifyAddress' smart constructor instead.
 data Address
-    = Line Int
-    | Range Int Int
+    = Line Buffer Int
+    | Range Buffer Int Int
     deriving (Eq, Show)
 
 -- |'AddressView' is used to inspect values of 'Address'; it's necessary because
 -- we don't export 'Address' data constructors, only 'verifyAddress' smart constructor.
 data AddressView
-    = LineView Int
-    | RangeView Int Int
+    = LineView Buffer Int
+    | RangeView Buffer Int Int
     deriving (Eq, Show)
 
 instance View Address AddressView where
-    view (Line n) = LineView n
-    view (Range start end) = RangeView start end
+    view (Line buffer n) = LineView buffer n
+    view (Range buffer start end) = RangeView buffer start end
 
 -- | 'UnverifiedAddress' represents one or multiple lines on which commands act;
 -- it's created by the user, and needs to be checked with 'verifyAddress' before use.
@@ -54,11 +55,11 @@ data UnverifiedAddress
 verifyAddress ∷ Buffer → UnverifiedAddress → Maybe Address
 
 verifyAddress buffer (UnverifiedLine n)
-    | n >= 1 && n <= (length (bufLines buffer)) = Just (Line n)
+    | n >= 1 && n <= (length (bufLines buffer)) = Just (Line buffer n)
     | otherwise = Nothing
 
 verifyAddress buffer (UnverifiedRange start end)
-    | start <= end && isStartValid && isEndValid = Just (Range start end)
+    | start <= end && isStartValid && isEndValid = Just (Range buffer start end)
     | otherwise = Nothing
   where
     isStartValid = isValid start
@@ -67,6 +68,12 @@ verifyAddress buffer (UnverifiedRange start end)
 
 
 -- |'getLines' retrieves from the buffer the lines pointed by the address.
-getLines ∷ Buffer → Address → [String]
-getLines buffer (Line n) = getLines buffer (Range n n)
-getLines (Buffer _ xs) (Range start end) = drop (start - 1) (take end xs)
+getLines ∷ Address → [String]
+getLines (Line buffer n) = getLines (Range buffer n n)
+getLines (Range (Buffer _ xs) start end) = drop (start - 1) (take end xs)
+
+
+-- |'addrToBuff' is a helper extracting buffer from a valid address.
+addrToBuff ∷ Address → Buffer
+addrToBuff (Line buffer _) = buffer
+addrToBuff (Range buffer _ _) = buffer

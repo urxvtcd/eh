@@ -26,4 +26,4 @@ module View (View, view) where
 --
 class View a b where
     -- |'view' returns view of a type.
-    view :: a → b
+    view ∷ a → b

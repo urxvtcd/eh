@@ -21,7 +21,7 @@ isRangeValid buffer start end = case address of
   where
     address = Buff.verifyAddress buffer (Buff.UnverifiedRange start end)
 
-spec :: Spec
+spec ∷ Spec
 spec = do
     describe "verifyAddress" $ do
         it "should return Nothing for zeroth line" $ do

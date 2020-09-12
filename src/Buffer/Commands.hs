@@ -21,7 +21,7 @@ data Command = Command
       name ∷ String
       -- |'run' runs a command on an address within a buffer.
       -- It returns modified buffer along with generated output.
-    , run ∷ Buff.Buffer → Buff.Address → Writer [String] Buff.Buffer
+    , run ∷ Buff.Address → Writer [String] Buff.Buffer
     }
 
 instance Eq Command where
@@ -34,11 +34,11 @@ instance Show Command where
 delete ∷ Command
 delete = Command "delete" delete'
 
-delete' ∷ Buff.Buffer → Buff.Address → Writer [String] Buff.Buffer
-delete' (Buff.Buffer _ xs) address = do
+delete' ∷ Buff.Address → Writer [String] Buff.Buffer
+delete' address = do
     let linesAfterDelete = case view address of
-            Buff.LineView n → deleteLines xs n n
-            Buff.RangeView start end → deleteLines xs start end
+            Buff.LineView (Buff.Buffer _ xs) n → deleteLines xs n n
+            Buff.RangeView (Buff.Buffer _ xs) start end → deleteLines xs start end
         newCursor = getCursorAfterDelete linesAfterDelete address
 
     return (Buff.Buffer newCursor linesAfterDelete)
@@ -52,8 +52,8 @@ getCursorAfterDelete xs address
 
 getFirstLineOfAddress ∷ Buff.Address → Int
 getFirstLineOfAddress address = case view address of
-    Buff.LineView n → n
-    Buff.RangeView start _ → start
+    Buff.LineView _ n → n
+    Buff.RangeView _ start _ → start
 
 
 deleteLines ∷ [String] → Int → Int → [String]
@@ -67,11 +67,11 @@ deleteLines xs start end = prefix ++ suffix
 goTo ∷ Command
 goTo = Command "goto" goTo'
 
-goTo' ∷ Buff.Buffer → Buff.Address → Writer [String] Buff.Buffer
-goTo' buffer@(Buff.Buffer _ bufLines) address = case view address of
-    Buff.LineView n → do
+goTo' ∷ Buff.Address → Writer [String] Buff.Buffer
+goTo' address = case view address of
+    Buff.LineView (Buff.Buffer _ bufLines) n → do
         return (Buff.Buffer n bufLines)
-    Buff.RangeView _ _ → do
+    Buff.RangeView buffer _ _ → do
         tell ["?"]
         return buffer
 
@@ -81,7 +81,7 @@ goTo' buffer@(Buff.Buffer _ bufLines) address = case view address of
 print' ∷ Command
 print' = Command "print" print''
 
-print'' ∷ Buff.Buffer → Buff.Address → Writer [String] Buff.Buffer
-print'' buffer address = do
-    tell $ Buff.getLines buffer address
-    return buffer
+print'' ∷ Buff.Address → Writer [String] Buff.Buffer
+print'' address = do
+    tell $ Buff.getLines address
+    return $ Buff.addrToBuff address

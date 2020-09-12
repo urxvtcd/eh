@@ -18,7 +18,7 @@ commands = Map.fromList
     , ("p", Command.print')
     ]
 
-main :: IO ()
+main ∷ IO ()
 main = do
     arguments ← Env.getArgs
     case arguments of
@@ -46,13 +46,13 @@ executeCommand ∷ Buff.Buffer → Buff.UnverifiedAddress → Command.Command �
 executeCommand b a c =
     case Buff.verifyAddress b a of
         Nothing → (b, ["invalid address"])
-        Just vAddress → W.runWriter (Command.run c b vAddress)
+        Just vAddress → W.runWriter (Command.run c vAddress)
 
 
-prompt :: HL.InputT IO String
+prompt ∷ HL.InputT IO String
 prompt = HL.handle (\HL.Interrupt → prompt) (HL.withInterrupt prompt')
   where
-    prompt' :: HL.InputT IO String
+    prompt' ∷ HL.InputT IO String
     prompt' = do
         input ← HL.getInputLine ":"
         case input of
